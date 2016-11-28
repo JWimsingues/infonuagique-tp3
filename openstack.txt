@@ -1,0 +1,14 @@
+http://pingouin.info.polymtl.ca/dashboard
+login: INF4410-01
+mdp: E5XwpFZp2
+
+ssh depuis l'exterieur : 
+ssh -D port login@L4714-07.info.polymtl.ca
+ensuite dans le navigateur faire :
+1 - parametres avances
+2 - reseau
+3 - proxy 
+4 - proxy socks 127.0.0.0 + port precise a la connexion precedente
+
+Le navigateur passe maintenant par le reseau interne de poly pour acceder a internet
+On peut donc aller sur le site openstack
