@@ -1,0 +1,84 @@
+heat_template_version: 2014-10-16
+
+description: A template to deploy a load balanced web server
+
+parameters:
+  image:
+    type: string
+    description: Image utilisee pour les serveurs
+    default: INF4410-Ubuntu-trusty-mini
+
+  flavor:
+    type: string
+    description: Flavor utilisee par les serveurs
+    default: INF4410-mini
+
+  subnet_id:
+    type: string
+    description: Sous-reseau dans lequel le load balancer sera situe
+    default: #A completer
+
+resources:
+  web_nodes:
+    type: OS::Heat::ResourceGroup
+    properties:
+      count: 2
+      resource_def:
+        type: OS::Nova::Server
+        properties:
+          name: my_server_%index%
+          image: { get_param: image }
+          flavor: { get_param: flavor }
+          user_data_format: RAW
+          networks:
+             - network: cac571ab-8e5c-4332-8e05-4c69a56bda9e
+          user_data:
+             str_replace:
+                template: |
+                    #!/bin/bash
+                    echo db_port
+                    echo Telechargement du script ...
+                    wget https://raw.githubusercontent.com/houssemmh/INF4410-TP3/master/server.py
+                    echo Lancement du serveur web
+                    python server.py &
+                params:
+                  db_port: { get_param: db_port }
+
+  pool:
+    type: OS::Neutron::Pool
+    properties:
+      name: lb_front_pool
+      protocol: HTTP
+      subnet_id: { get_resource: subnet_id }
+      lb_method: ROUND_ROBIN
+      monitors: [ { get_resource: monitor } ]
+      vip:
+        name: front_vip
+        description: Front-end virtual IP (VIP)
+        protocol_port: 80
+
+  lbalancer:
+    type: OS::Neutron::LoadBalancer
+    properties:
+      members: { get_resource: web_nodes }
+      pool_id: { get_resource: pool }
+      protocol_port: 80
+
+  monitor:
+    type: OS::Neutron::HealthMonitor
+    properties:
+      type: HTTP
+      # Le moniteur d'activité envoie un message à intervalles de 
+      # 10 secondes aux machines pour vérifier leur activité
+      delay: 10
+      # S'il ne reçoit pas de réponse dans un délai de 5 secondes, 
+      # il envoie une seconde requête
+      timeout: 5
+      # S'il ne reçoit pas de réponse à cette seconde requête dans un 
+      # autre délai de 5 secondes, il déclare la machine inactive
+      max_retries: 2
+
+outputs:
+  pool_ip_address:
+    value: {get_attr: [pool, vip, address]}
+    description: The IP address of the load balancing pool
