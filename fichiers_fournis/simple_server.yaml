@@ -57,10 +57,11 @@ resources:
       user_data_format: RAW
       user_data:
         str_replace:
-          template: ¦
+          template: |
             #!/bin/bash
             echo db_port
-            wget "https://raw.githubusercontent.com/houssemmh/INF4410-TP3/master/server.py"
+            echo Telechargement du script ...
+            wget https://raw.githubusercontent.com/houssemmh/INF4410-TP3/master/server.py
             echo Lancement du serveur web
             python server.py &
           params:
