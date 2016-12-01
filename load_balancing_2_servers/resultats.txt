@@ -1,0 +1,8 @@
+Résultats pour 50 requetes, cf script_repartitor.sh
+Ligne de commande : ./script_repartitor.sh sur la VM cliente
+Run 1 : Temps d'execution : 21.806408859
+Run 2 : Temps d'execution : 33.512068689
+Run 3 : Temps d'execution : 22.310003316
+Run 4 : Temps d'execution : 29.757424730
+Run 5 : Temps d'execution : 36.756091451
+Moyenne sur 5 runs : 28.82839941

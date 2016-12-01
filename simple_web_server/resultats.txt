@@ -1,0 +1,8 @@
+Résultats pour 50 requetes, cf script_single_server.sh
+Ligne de commande : ./script_single_server.sh sur la VM cliente
+Run 1 : Temps d'execution :  71.500156437
+Run 2 : Temps d'execution :  48.426564857
+Run 3 : Temps d'execution :  48.730824373
+Run 4 : Temps d'execution :  46.491464524
+Run 5 : Temps d'execution :  68.488109846
+Moyenne sur 5 runs : 56.72742401
